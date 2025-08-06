@@ -1,0 +1,6 @@
+# Ignore virtual environment
+internshipenv/
+
+# Ignore all migrations except __init__.py
+*/migrations/*
+!*/migrations/__init__.py
