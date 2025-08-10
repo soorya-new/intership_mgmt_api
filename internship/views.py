@@ -4,9 +4,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import get_user_model
-from .serializers import RegisterSerializer,ProfileSerializer
+from .serializers import RegisterSerializer,ProfileSerializer,InternshipSerializer, TaskSerializer
 from rest_framework import generics, permissions
-from .models import Profile
+from .models import Profile, Internship, Task
+from rest_framework import viewsets
+from rest_framework.permissions import AllowAny
+from .permissions import IsAdminRole
+
 
 
 User = get_user_model()
@@ -36,4 +40,27 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
+    
 
+
+
+# Internship API
+class InternshipViewSet(viewsets.ModelViewSet):
+    queryset = Internship.objects.all()
+    serializer_class = InternshipSerializer
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAdminRole()]  # Only admin can modify
+        return [AllowAny()]  # Anyone can view
+
+
+# Task API
+class TaskViewSet(viewsets.ModelViewSet):
+    queryset = Task.objects.all()
+    serializer_class = TaskSerializer
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAdminRole()]  # Only admin can modify
+        return [AllowAny()]  # Anyone can view

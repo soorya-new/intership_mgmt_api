@@ -47,3 +47,19 @@ class ProfileSerializer(serializers.ModelSerializer):
         instance.phone = validated_data.get('phone', instance.phone)
         instance.save()
         return instance
+    
+
+from rest_framework import serializers
+from .models import Internship, Task
+
+class InternshipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Internship
+        fields = '__all__'
+
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = '__all__'
+
